@@ -1,5 +1,6 @@
 "use client"
 import React, {useEffect, useState} from 'react';
+import PropTypes from 'prop-types';
 import {
     Autocomplete,
     Box,
@@ -14,8 +15,8 @@ import {
     TableRow,
     TextField,
     Typography,
-} from "@mui/material";
-import Image from "next/image";
+} from '@mui/material';
+import Image from 'next/image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -28,25 +29,28 @@ interface Product {
     qty: number;
 }
 
-const label = {inputProps: {'aria-label': 'Switch demo'}};
-const TableC = ({products: any}) => {
-    const [productsState, setProductsState] = useState(products);
-    const [query, setQuery] = useState("");
+type productsType = Array<Product>;
 
-    const names = productsState && productsState.map(el => el.name);
-    const selectedValues = React.useMemo(
-        () => names.filter((v) => v),
-        [names],
-    );
+const label = {inputProps: {'aria-label': 'Switch demo'}};
+
+const TableC = ({products}: {
+    products: productsType
+}) => {
+    const [productsState, setProductsState] = useState(products);
+    const [query, setQuery] = useState('');
+
+    const names = productsState && productsState.map((el) => el.name);
+    const selectedValues = React.useMemo(() => names.filter((v) => v), [names]);
+
     useEffect(() => {
-        if (query === "") {
+        if (query === '') {
             setProductsState(products);
         } else {
-            const filteredProducts = productsState && productsState.filter(el => query === el.name);
+            const filteredProducts = productsState && productsState.filter((el) => query === el.name);
             setProductsState(filteredProducts);
         }
+    }, [query]);
 
-    }, [query])
     return (
         <>
             <Autocomplete
@@ -57,7 +61,7 @@ const TableC = ({products: any}) => {
                 disablePortal
                 id="combo-box-demo"
                 options={selectedValues}
-                sx={{width: 300, marginTop: "20px", marginBottom: "20px"}}
+                sx={{width: 300, marginTop: '20px', marginBottom: '20px'}}
                 renderInput={(params) => <TextField {...params} label="Product name"/>}
             />
             <TableContainer component={Paper}>
@@ -76,42 +80,37 @@ const TableC = ({products: any}) => {
                     <TableBody>
                         {productsState.map((product: any) => (
                             <TableRow key={product.productCode}>
-
                                 <TableCell>
-                                    <div><Image src={product.image} width={150} height={150}
-                                                alt={"Image"}/></div>
+                                    <div><Image src={product.image} width={150} height={150} alt="Image"/></div>
                                 </TableCell>
-
                                 <TableCell>{product.productCode}</TableCell>
                                 <TableCell><Typography variant="body2"
                                                        style={{fontWeight: 'bold'}}>{product.name}</Typography></TableCell>
                                 <TableCell><Typography variant="body2"
                                                        style={{fontWeight: 'bold'}}>{product.qty}</Typography></TableCell>
                                 <TableCell><Typography variant="body2"
-                                                       style={{fontWeight: 'bold'}}>{product.price + "" + product.currency}</Typography></TableCell>
+                                                       style={{fontWeight: 'bold'}}>{product.price + ' ' + product.currency}</Typography></TableCell>
                                 <TableCell> <Button variant="outlined"
-                                                    style={{paddingTop: "4px", paddingBottom: "4px"}}>
-                                    Add To Cart
-                                </Button></TableCell>
+                                                    style={{paddingTop: '4px', paddingBottom: '4px'}}>Add To
+                                    Cart</Button></TableCell>
                                 <TableCell>
                                     <div
-                                        style={{display: 'flex', flexDirection: 'row', alignItems: "center", justifyContent: "space-evenly"}}>
-
+                                        style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly'}}>
                                         <Box
                                             sx={{
-                                                borderRadius: "50%",
+                                                borderRadius: '50%',
                                                 boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
                                                 display: 'inline-block',
                                                 p: 1,
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                cursor: "pointer",
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
                                             }}
                                         >
-                                            <FavoriteIcon color={"info"}/>
+                                            <FavoriteIcon color="info"/>
                                         </Box>
-                                        <div style={{cursor: "pointer"}}>
+                                        <div style={{cursor: 'pointer'}}>
                                             <CloseIcon/>
                                         </div>
                                     </div>
@@ -123,6 +122,19 @@ const TableC = ({products: any}) => {
             </TableContainer>
         </>
     );
+};
+
+TableC.propTypes = {
+    products: PropTypes.arrayOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            productCode: PropTypes.number.isRequired,
+            price: PropTypes.number.isRequired,
+            image: PropTypes.string.isRequired,
+            currency: PropTypes.string.isRequired,
+            qty: PropTypes.number.isRequired,
+        })
+    ).isRequired,
 };
 
 export default TableC;
