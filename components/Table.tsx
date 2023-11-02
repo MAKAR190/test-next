@@ -38,7 +38,7 @@ const TableC = ({products}: {
 }) => {
     const [productsState, setProductsState] = useState(products);
     const [query, setQuery] = useState('');
-
+    const [enablePreview, setEnablePreview] = useState(true);
     const names = productsState && productsState.map((el) => el.name);
     const selectedValues = React.useMemo(() => names.filter((v) => v), [names]);
 
@@ -68,21 +68,24 @@ const TableC = ({products}: {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Photo</TableCell>
+                            {enablePreview && <TableCell>Photo</TableCell>}
+
                             <TableCell>Product Code</TableCell>
                             <TableCell>Name</TableCell>
                             <TableCell>QTY</TableCell>
                             <TableCell>Price</TableCell>
                             <TableCell></TableCell>
-                            <TableCell> <Switch {...label} defaultChecked/> Image</TableCell>
+                            <TableCell> <Switch checked={enablePreview}
+                                                onChange={() => setEnablePreview(prev => !prev)} {...label}
+                                                defaultChecked/> Image</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {productsState.map((product: any) => (
                             <TableRow key={product.productCode}>
-                                <TableCell>
+                                {enablePreview && <TableCell>
                                     <div><Image src={product.image} width={150} height={150} alt="Image"/></div>
-                                </TableCell>
+                                </TableCell>}
                                 <TableCell>{product.productCode}</TableCell>
                                 <TableCell><Typography variant="body2"
                                                        style={{fontWeight: 'bold'}}>{product.name}</Typography></TableCell>
