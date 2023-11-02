@@ -15,6 +15,8 @@ export default async function Home() {
     const filePath = path.join(process.cwd(), 'data', 'MOCK_DATA.json');
     const rawData = await fs.readFileSync(filePath, 'utf8');
     const products = JSON.parse(rawData);
+
+    
     return (
         <main className={styles.main}>
             <div style={{
