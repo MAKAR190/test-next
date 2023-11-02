@@ -12,7 +12,8 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    TextField
+    TextField,
+    Typography,
 } from "@mui/material";
 import Image from "next/image";
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -66,7 +67,7 @@ const TableC = ({products}) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {productsState.map((product) => (
+                        {productsState.map((product: any) => (
                             <TableRow key={product.productCode}>
 
                                 <TableCell>
@@ -75,9 +76,12 @@ const TableC = ({products}) => {
                                 </TableCell>
 
                                 <TableCell>{product.productCode}</TableCell>
-                                <TableCell>{product.name}</TableCell>
-                                <TableCell>{product.qty}</TableCell>
-                                <TableCell>{product.price}</TableCell>
+                                <TableCell><Typography variant="body2"
+                                                       style={{fontWeight: 'bold'}}>{product.name}</Typography></TableCell>
+                                <TableCell><Typography variant="body2"
+                                                       style={{fontWeight: 'bold'}}>{product.qty}</Typography></TableCell>
+                                <TableCell><Typography variant="body2"
+                                                       style={{fontWeight: 'bold'}}>{product.price}</Typography></TableCell>
                                 <TableCell> <Button variant="outlined"
                                                     style={{paddingTop: "4px", paddingBottom: "4px"}}>
                                     Add To Cart
