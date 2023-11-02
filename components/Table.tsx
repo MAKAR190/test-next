@@ -1,6 +1,7 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
+import CurrencyChange from "./CurrencyChange";
 import {
     Autocomplete,
     Box,
@@ -14,7 +15,7 @@ import {
     TableHead,
     TableRow,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material';
 import Image from 'next/image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -41,6 +42,24 @@ const TableC = ({products}: {
     const [enablePreview, setEnablePreview] = useState(true);
     const names = productsState && productsState.map((el) => el.name);
     const selectedValues = React.useMemo(() => names.filter((v) => v), [names]);
+    const [currency, setCurrency] = useState('usd');
+    const currencyUAH = 38;
+    const convertPrice = (product: Product) => {
+        switch (currency) {
+            case "uah":
+                if (product.currency === "UAH") return product.price + "UAH";
+
+                return Math.ceil(product.price * currencyUAH).toFixed(2) + "UAH";
+            default:
+                if (product.currency === "USD") return product.price + "USD";
+
+                return Math.ceil(product.price / currencyUAH).toFixed(2) + "USD";
+        }
+
+    }
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCurrency((event.target as HTMLInputElement).value);
+    };
 
     useEffect(() => {
         if (query === '') {
@@ -53,17 +72,20 @@ const TableC = ({products}: {
 
     return (
         <>
-            <Autocomplete
-                value={query}
-                onInputChange={(event, newInputValue) => {
-                    setQuery(newInputValue);
-                }}
-                disablePortal
-                id="combo-box-demo"
-                options={selectedValues}
-                sx={{width: 300, marginTop: '20px', marginBottom: '20px'}}
-                renderInput={(params) => <TextField {...params} label="Product name"/>}
-            />
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <Autocomplete
+                    value={query}
+                    onInputChange={(event, newInputValue) => {
+                        setQuery(newInputValue);
+                    }}
+                    disablePortal
+                    id="combo-box-demo"
+                    options={selectedValues}
+                    sx={{width: 300, marginTop: '20px', marginBottom: '20px'}}
+                    renderInput={(params) => <TextField {...params} label="Product name"/>}
+                />
+                <CurrencyChange currency={currency} handleChange={handleChange}/>
+            </div>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -92,7 +114,7 @@ const TableC = ({products}: {
                                 <TableCell><Typography variant="body2"
                                                        style={{fontWeight: 'bold'}}>{product.qty}</Typography></TableCell>
                                 <TableCell><Typography variant="body2"
-                                                       style={{fontWeight: 'bold'}}>{product.price + ' ' + product.currency}</Typography></TableCell>
+                                                       style={{fontWeight: 'bold'}}>{convertPrice(product)}</Typography></TableCell>
                                 <TableCell> <Button variant="outlined"
                                                     style={{paddingTop: '4px', paddingBottom: '4px'}}>Add To
                                     Cart</Button></TableCell>
