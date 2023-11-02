@@ -19,8 +19,17 @@ import Image from "next/image";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CloseIcon from '@mui/icons-material/Close';
 
+interface Product {
+    name: string;
+    productCode: number;
+    price: number;
+    image: string;
+    currency: string;
+    qty: number;
+}
+
 const label = {inputProps: {'aria-label': 'Switch demo'}};
-const TableC = ({products}) => {
+const TableC = ({products: any}) => {
     const [productsState, setProductsState] = useState(products);
     const [query, setQuery] = useState("");
 
@@ -58,12 +67,10 @@ const TableC = ({products}) => {
                             <TableCell>Photo</TableCell>
                             <TableCell>Product Code</TableCell>
                             <TableCell>Name</TableCell>
-                            {/*<TableCell>Stock</TableCell>*/}
                             <TableCell>QTY</TableCell>
                             <TableCell>Price</TableCell>
                             <TableCell></TableCell>
                             <TableCell> <Switch {...label} defaultChecked/> Image</TableCell>
-
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -81,7 +88,7 @@ const TableC = ({products}) => {
                                 <TableCell><Typography variant="body2"
                                                        style={{fontWeight: 'bold'}}>{product.qty}</Typography></TableCell>
                                 <TableCell><Typography variant="body2"
-                                                       style={{fontWeight: 'bold'}}>{product.price}</Typography></TableCell>
+                                                       style={{fontWeight: 'bold'}}>{product.price + "" + product.currency}</Typography></TableCell>
                                 <TableCell> <Button variant="outlined"
                                                     style={{paddingTop: "4px", paddingBottom: "4px"}}>
                                     Add To Cart
@@ -117,4 +124,5 @@ const TableC = ({products}) => {
         </>
     );
 };
+
 export default TableC;

@@ -35,7 +35,8 @@ export default async function Home() {
                     <Typography marginTop={"10px"} variant="h4" component="h3" style={{fontWeight: 'bold'}}>
                         Wishlist
                     </Typography>
-                    <Typography marginTop={"10px"} variant={"body2"} color={"#999999"}>158 products</Typography>
+                    <Typography marginTop={"10px"} variant={"body2"}
+                                color={"#999999"}>{products.length} products</Typography>
 
                 </Grid>
 
